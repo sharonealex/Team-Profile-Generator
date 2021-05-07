@@ -23,8 +23,33 @@ const generalQuestions = [
     },
     {
         type: "input",
-        name: "TeamMemberId",
-        message: "Please provide team memeber ID"
+        name: "EmployeeId",
+        message: "Please provide team memeber's employee ID"
+    }
+]
+
+const managerQuestions = [
+    {
+        type: "input",
+        name: "officeNumber",
+        message: "Please provide us with Manager's office number",
+    }
+]
+
+const engineerQuestions = [
+    {
+        type: "input",
+        name: "githubUsername",
+        message: "Please provide engineers github username"
+    }
+]
+
+
+const internQuestions = [
+    {
+        type: "input",
+        name: "school",
+        message: "Please provide intern's school"
     }
 ]
 
