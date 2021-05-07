@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const manager = require('./lib/Manager');
 
 const generalQuestions = [
     {
@@ -23,7 +24,7 @@ const generalQuestions = [
     },
     {
         type: "input",
-        name: "EmployeeId",
+        name: "employeeId",
         message: "Please provide team memeber's employee ID"
     }
 ]
@@ -31,15 +32,24 @@ const generalQuestions = [
 const managerQuestions = [
     {
         type: "input",
-        name: "officeNumber",
+        name: "roleData",
         message: "Please provide us with Manager's office number",
+    },
+    {
+        type: "list",
+        message: "Would you like to add more members to your team?",
+        choices: [
+            "yes",
+            "no"
+        ],
+        name: "moreMembers"
     }
 ]
 
 const engineerQuestions = [
     {
         type: "input",
-        name: "githubUsername",
+        name: "roleData",
         message: "Please provide engineers github username"
     }
 ]
@@ -48,13 +58,19 @@ const engineerQuestions = [
 const internQuestions = [
     {
         type: "input",
-        name: "school",
+        name: "roleData",
         message: "Please provide intern's school"
     }
 ]
 
 //function to get all team memeber details using inquirer package.
+function getTeamMemberInputs(generalQuestions) {
+    return inquirer.prompt(generalQuestions)
+}
 
+function getManagerInputs(managerQuestions) {
+    return inquirer.prompt(managerQuestions);
+}
 
 //import the html template for each role
 
@@ -62,9 +78,34 @@ const internQuestions = [
 
 //initialise app.
 
+// function init() {
+//     getTeamMemberInputs(generalQuestions)
+//         .then(({ name, role, emailID, employeeId }) => {
+//             if (role === "Manager") {
+//                 getManagerInputs(managerQuestions)
+//                     .then(({ roleData, moreMembers }) => {
+//                         console.log(roleData)
+//                     }
+//                 })
+           
+//         })
+
+      
+// }
+
+
 function init(){
-
+    getTeamMemberInputs(generalQuestions)
+    .then(({ name, role, emailID, employeeId })=>{
+        let teamMember;
+        if(role === 'Manager'){
+            getManagerInputs(managerQuestions)
+            .then(({ roleData, moreMembers })=>{
+                 teamMember = new manager (name, role, emailID, employeeId, roleData)
+                 console.log(teamMember.emailId)
+            })
+        }
+    })
 }
-
 
 init();
