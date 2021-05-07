@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const manager = require('./lib/Manager');
+const engineer = require('./lib/Engineer');
 
 const generalQuestions = [
     {
@@ -72,6 +73,10 @@ function getManagerInputs(managerQuestions) {
     return inquirer.prompt(managerQuestions);
 }
 
+function getEngineerInputs(engineerQuestions) {
+    return inquirer.prompt(engineerQuestions);
+}
+
 //import the html template for each role
 
 //populate the html template with values from the previous
@@ -86,6 +91,13 @@ function init(){
             getManagerInputs(managerQuestions)
             .then(({ roleData, moreMembers })=>{
                  teamMember = new manager (name, role, emailID, employeeId, roleData)
+                 console.log(teamMember.emailId)
+            })
+        }
+        if(role === 'Engineer'){
+            getEngineerInputs(engineerQuestions)
+            .then(({ roleData, moreMembers })=>{
+                 teamMember = new engineer (name, role, emailID, employeeId, roleData)
                  console.log(teamMember.emailId)
             })
         }
