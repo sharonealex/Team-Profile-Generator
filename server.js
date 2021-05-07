@@ -1,8 +1,9 @@
 const inquirer = require('inquirer');
-const manager = require('./lib/Manager');
-const engineer = require('./lib/Engineer');
-const intern = require('./lib/Intern');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
+const teamMembers = [];
 const generalQuestions = [
     {
         type: "input",
@@ -75,6 +76,7 @@ function getManagerInputs(managerQuestions) {
 }
 
 function getEngineerInputs(engineerQuestions) {
+    console.log("here1")
     return inquirer.prompt(engineerQuestions);
 }
 
@@ -93,26 +95,26 @@ function init(){
     .then(({ name, role, emailID, employeeId })=>{
         let teamMember;
         if(role === 'Manager'){
-            getManagerInputs(managerQuestions)
+              return getManagerInputs(managerQuestions)
             .then(({ roleData, moreMembers })=>{
-                 teamMember = new manager (name, role, emailID, employeeId, roleData)
-                 console.log(teamMember.emailId)
+                 teamMember = new Manager (name, role, emailID, employeeId, roleData);
             })
         }
         if(role === 'Engineer'){
-            getEngineerInputs(engineerQuestions)
+            return getEngineerInputs(engineerQuestions)
             .then(({ roleData, moreMembers })=>{
-                 teamMember = new engineer (name, role, emailID, employeeId, roleData)
-                 console.log(teamMember.emailId)
+                 teamMember = new Engineer (name, role, emailID, employeeId, roleData);
             })
         }
         if(role === 'Intern'){
-            getInternInputs(internQuestions)
+            return getInternInputs(internQuestions)
             .then(({ roleData })=>{
-                 teamMember = new intern (name, role, emailID, employeeId, roleData)
-                 console.log(teamMember.emailId)
+                 teamMember = new Intern (name, role, emailID, employeeId, roleData);
             })
         }
+        console.log("hey")
+        teamMembers.push(teamMember);
+        console.log(teamMembers)
     })
 }
 
