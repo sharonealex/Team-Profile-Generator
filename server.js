@@ -78,22 +78,6 @@ function getManagerInputs(managerQuestions) {
 
 //initialise app.
 
-// function init() {
-//     getTeamMemberInputs(generalQuestions)
-//         .then(({ name, role, emailID, employeeId }) => {
-//             if (role === "Manager") {
-//                 getManagerInputs(managerQuestions)
-//                     .then(({ roleData, moreMembers }) => {
-//                         console.log(roleData)
-//                     }
-//                 })
-           
-//         })
-
-      
-// }
-
-
 function init(){
     getTeamMemberInputs(generalQuestions)
     .then(({ name, role, emailID, employeeId })=>{
