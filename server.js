@@ -2,6 +2,11 @@ const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const baseHtml = require('./src/baseHtmlTemplate');
+const managerHTML = require('./src/baseHtmlTemplate');
+
+
+
 
 const teamMembers = [];
 const generalQuestions = [
@@ -85,11 +90,15 @@ function getInternInputs(internQuestions) {
 
 //import the html template for each role
 
+function getBaseHtml(){
+
+}
 //populate the html template with values from the previous
 
 //initialise app.
 
 function init(){
+    getBaseHtml();
     getTeamMemberInputs(generalQuestions)
     .then(({ name, role, emailID, employeeId })=>{
         let teamMember;
@@ -118,9 +127,13 @@ function init(){
     })
     .then(({teamMember, moreMembers})=>{
         teamMembers.push(teamMember);
+    
         if(moreMembers === "yes"){
             getTeamMemberInputs(generalQuestions);
         }
+    })
+    .catch((err)=>{
+        console.log(err)
     })
 }
 
