@@ -76,7 +76,6 @@ function getManagerInputs(managerQuestions) {
 }
 
 function getEngineerInputs(engineerQuestions) {
-    console.log("here1")
     return inquirer.prompt(engineerQuestions);
 }
 
@@ -96,25 +95,32 @@ function init(){
         let teamMember;
         if(role === 'Manager'){
               return getManagerInputs(managerQuestions)
-            .then(({ roleData, moreMembers })=>{
-                 teamMember = new Manager (name, role, emailID, employeeId, roleData);
+                .then(({ roleData, moreMembers })=>{
+                    teamMember = new Manager (name, role, emailID, employeeId, roleData);
+                    return {teamMember, moreMembers};
             })
         }
         if(role === 'Engineer'){
             return getEngineerInputs(engineerQuestions)
             .then(({ roleData, moreMembers })=>{
                  teamMember = new Engineer (name, role, emailID, employeeId, roleData);
+                 return {teamMember, moreMembers};
             })
         }
         if(role === 'Intern'){
             return getInternInputs(internQuestions)
             .then(({ roleData })=>{
                  teamMember = new Intern (name, role, emailID, employeeId, roleData);
+                 return {teamMember, moreMembers};
             })
         }
-        console.log("hey")
+        return teamMember;
+    })
+    .then(({teamMember, moreMembers})=>{
         teamMembers.push(teamMember);
-        console.log(teamMembers)
+        if(moreMembers === "yes"){
+            getTeamMemberInputs(generalQuestions);
+        }
     })
 }
 
