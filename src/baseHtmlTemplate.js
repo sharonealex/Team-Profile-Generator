@@ -1,5 +1,8 @@
+const renderMemberCards = require('./populateHTML');
+console.log(renderMemberCards);
 
-const t1 =  `<!DOCTYPE html>
+
+const renderBaseHtml = (data) =>  `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,10 +17,13 @@ const t1 =  `<!DOCTYPE html>
     </nav>
     <div class="container">
         <div class="row">
+        <ul class="ul"> ${renderMemberCards(data)}</ul>
         </div>
-    </div>
-    
+</div>
 </body>
 </html>`
+       
 
-module.exports = t1;
+module.exports ={
+    renderBaseHtml: renderBaseHtml
+} 

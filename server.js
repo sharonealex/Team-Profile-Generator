@@ -3,8 +3,8 @@ const fsPromises = require('fs').promises;
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
-const baseHtml = require('./src/baseHtmlTemplate');
-const managerHTML = require('./src/baseHtmlTemplate');
+const baseHtmlTemplate = require('./src/baseHtmlTemplate');
+const populateHTML = require('./src/populateHTML')
 
 
 
@@ -60,15 +60,32 @@ const engineerQuestions = [
         type: "input",
         name: "roleData",
         message: "Please provide engineers github username"
+    },
+    {
+        type: "list",
+        message: "Would you like to add more members to your team?",
+        choices: [
+            "yes",
+            "no"
+        ],
+        name: "moreMembers"
     }
 ]
-
 
 const internQuestions = [
     {
         type: "input",
         name: "roleData",
         message: "Please provide intern's school"
+    },
+    {
+        type: "list",
+        message: "Would you like to add more members to your team?",
+        choices: [
+            "yes",
+            "no"
+        ],
+        name: "moreMembers"
     }
 ]
 
@@ -89,95 +106,68 @@ function getInternInputs(internQuestions) {
     return inquirer.prompt(internQuestions);
 }
 
-//import the html template for each role
 
-function addRoleBasedHtmlCard(memberData) {
-    return new Promise((resolve, reject)=>{
-        const name = memberData.getName();
-        const role = memberData.getRole();
-        const emailId = memberData.getEmailId();
-        const employeeId = memberData.getEmployeeId();
 
-        let data = '';
-        if(role === 'Manager'){
-            const officeNumber = memberData.getOfficeNumber();
-            data = `<div class="col-6">
-            <div class="card mx-auto mb-3" style="width: 18rem">
-            <h5 class="card-header">${name}<br /><br />${role}</h5>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${employeeId}</li>
-                <li class="list-group-item">Email Address: ${emailId}</li>
-                <li class="list-group-item">Office Phone: ${officeNumber}</li>
-            </ul>
-            </div>
-        </div>`
-        console.log("added manager card");
-        fsPromises.appendFile("./output/team.html", data)
-        .then((data)=>{
-            console.log("html appended..")
-        })
-        .catch((err)=>{
-            console.log("error" + err);
-        })
-        }
-      
-    });
-}
-
-function writeBaseHtmlToFile(data) {
+function writeHtmlToFile() {
+    console.log("writing...")
     const fileName = "./output/team.html";
-    return fsPromises.writeFile(fileName, data)
+    const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
+    return fsPromises.writeFile(fileName, html)
 }
 
 
-//populate the html template with values from the previous
-
-//initialise app.
-
-function init(){
-    writeBaseHtmlToFile(baseHtml)
-    .catch((err)=>{
-        console.log(err)
-    })
-    getTeamMemberInputs(generalQuestions)
-    .then(({ name, role, emailID, employeeId })=>{
+function memberConstructor({ name, role, emailID, employeeId }) {
         let teamMember;
-        if(role === 'Manager'){
-              return getManagerInputs(managerQuestions)
-                .then(({ roleData, moreMembers })=>{
-                    teamMember = new Manager (name, role, emailID, employeeId, roleData);
-                    return {teamMember, moreMembers};
-            })
+        if (role === 'Manager') {
+            console.log("hi");
+            return getManagerInputs(managerQuestions)
+                .then(({ roleData, moreMembers }) => {
+                    teamMember = new Manager(name, role, emailID, employeeId, roleData);
+                    console.log(teamMember);
+                    return Promise.resolve(teamMember);
+                })
         }
-        if(role === 'Engineer'){
+        else if (role === 'Engineer') {
             return getEngineerInputs(engineerQuestions)
-            .then(({ roleData, moreMembers })=>{
-                 teamMember = new Engineer (name, role, emailID, employeeId, roleData);
-                 return {teamMember, moreMembers};
-            })
+                .then(({ roleData, moreMembers }) => {
+                    teamMember = new Engineer(name, role, emailID, employeeId, roleData);
+                    return teamMember;
+                })
         }
-        if(role === 'Intern'){
+        else {
             return getInternInputs(internQuestions)
-            .then(({ roleData })=>{
-                 teamMember = new Intern (name, role, emailID, employeeId, roleData);
-                 return {teamMember, moreMembers};
-            })
+                .then(({ roleData }) => {
+                    teamMember = new Intern(name, role, emailID, employeeId, roleData);
+                    return teamMember;
+                })
         }
-        return teamMember;
-    })
-    .then(({teamMember, moreMembers})=>{
-        teamMembers.push(teamMember);
-        addRoleBasedHtmlCard(teamMember)
-        .catch((err)=>{
-            console.log(err);
+    }
+
+function init() {
+    getTeamMemberInputs(generalQuestions)
+        .then((data)=>{
+            return memberConstructor(data)
         })
-        if(moreMembers === "yes"){
-            getTeamMemberInputs(generalQuestions);
-        }
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+        .then((memberObj)=>{
+            console.log(memberObj);
+            teamMembers.push(memberObj)
+            console.log("array" + teamMembers)
+            writeHtmlToFile(teamMembers)
+            .then((resolved)=>{
+                console.log("written to file")
+            })
+            
+        })
+        // writeHtmlToFile(teamMembers)
+        // .then(()=>{
+        //     console.log("writing html")
+        // })
+        // .then(({ teamMember, moreMembers }) => {
+        //     teamMembers.push(teamMember);
+        // })
+        .catch((err) => {
+            console.log(err)
+        })
 }
 
 init();
