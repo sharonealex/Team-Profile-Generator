@@ -1,5 +1,5 @@
 const renderMemberCards = require('./populateHTML');
-console.log(renderMemberCards);
+
 
 
 const renderBaseHtml = (data) =>  `<!DOCTYPE html>

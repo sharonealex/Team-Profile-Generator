@@ -109,7 +109,6 @@ function getInternInputs(internQuestions) {
 
 
 function writeHtmlToFile() {
-    console.log("writing...")
     const fileName = "./output/team.html";
     const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
     return fsPromises.writeFile(fileName, html)
@@ -119,11 +118,9 @@ function writeHtmlToFile() {
 function memberConstructor({ name, role, emailID, employeeId }) {
         let teamMember;
         if (role === 'Manager') {
-            console.log("hi");
             return getManagerInputs(managerQuestions)
                 .then(({ roleData, moreMembers }) => {
                     teamMember = new Manager(name, role, emailID, employeeId, roleData);
-                    console.log(teamMember);
                     return Promise.resolve(teamMember);
                 })
         }
@@ -149,22 +146,12 @@ function init() {
             return memberConstructor(data)
         })
         .then((memberObj)=>{
-            console.log(memberObj);
             teamMembers.push(memberObj)
-            console.log("array" + teamMembers)
             writeHtmlToFile(teamMembers)
             .then((resolved)=>{
-                console.log("written to file")
             })
             
         })
-        // writeHtmlToFile(teamMembers)
-        // .then(()=>{
-        //     console.log("writing html")
-        // })
-        // .then(({ teamMember, moreMembers }) => {
-        //     teamMembers.push(teamMember);
-        // })
         .catch((err) => {
             console.log(err)
         })
