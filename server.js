@@ -63,37 +63,12 @@ function getRoleBasedInputs(roleQues) {
 }
 
 
-function writeHtmlToFile() {
+function populateHtmlAndWriteToFile(teamMembers) {
     const fileName = "./output/team.html";
     const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
     return fsPromises.writeFile(fileName, html)
 }
 
-
-function memberConstructor({ name, role, emailID, employeeId }) {
-    let teamMember;
-    if (role === 'Manager') {
-        return getManagerInputs(managerQuestions)
-            .then(({ roleData, moreMembers }) => {
-                teamMember = new Manager(name, role, emailID, employeeId, roleData);
-                return Promise.resolve(teamMember);
-            })
-    }
-    else if (role === 'Engineer') {
-        return getEngineerInputs(engineerQuestions)
-            .then(({ roleData, moreMembers }) => {
-                teamMember = new Engineer(name, role, emailID, employeeId, roleData);
-                return teamMember;
-            })
-    }
-    else {
-        return getInternInputs(internQuestions)
-            .then(({ roleData }) => {
-                teamMember = new Intern(name, role, emailID, employeeId, roleData);
-                return teamMember;
-            })
-    }
-}
 
 function init() {
     getTeamMemberInputs(generalQuestions)
@@ -111,7 +86,6 @@ function init() {
             };
             getRoleBasedInputs(roleQuestion)
                 .then(({ roleQues, moreMembers }) => {
-                    console.log(roleQues)
                     let teamMember;
                     switch (role) {
                         case 'Manager':
@@ -124,28 +98,17 @@ function init() {
                             teamMember = new Intern(name, role, emailID, employeeId, roleQues);
                     };
                     teamMembers.push(teamMember);
-                    console.log('teamMembers', teamMembers)
                     if (moreMembers === 'yes') {
                         return init()
                     }
+                    populateHtmlAndWriteToFile(teamMembers)
+
                    
                 })
                 .catch((err)=>{
                     console.log(err);
                 })
-
-            // return memberConstructor(data)
         })
-        // .then((res)=>{
-        //     console.log(res);
-        // })
-        // .then((memberObj)=>{
-        //     teamMembers.push(memberObj)
-        //     writeHtmlToFile(teamMembers)
-        //     .then((resolved)=>{
-        //     })
-
-        // })
         .catch((err) => {
             console.log(err)
         })

@@ -1,5 +1,4 @@
 function renderMemberCards(membersData){
-    console.log("here" + membersData)
     const htmlCardArr = membersData.map(function(data){
         let memberRole = data.getRole();
         if(memberRole === 'Manager'){

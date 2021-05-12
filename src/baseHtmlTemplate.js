@@ -1,7 +1,5 @@
 const renderMemberCards = require('./populateHTML');
 
-
-
 const renderBaseHtml = (data) =>  `<!DOCTYPE html>
 <html lang="en">
 <head>
