@@ -38,74 +38,29 @@ const generalQuestions = [
     }
 ]
 
-const managerQuestions = [
-    {
-        type: "input",
-        name: "roleData",
-        message: "Please provide us with Manager's office number",
-    },
-    {
-        type: "list",
-        message: "Would you like to add more members to your team?",
-        choices: [
-            "yes",
-            "no"
-        ],
-        name: "moreMembers"
-    }
-]
 
-const engineerQuestions = [
-    {
-        type: "input",
-        name: "roleData",
-        message: "Please provide engineers github username"
-    },
-    {
-        type: "list",
-        message: "Would you like to add more members to your team?",
-        choices: [
-            "yes",
-            "no"
-        ],
-        name: "moreMembers"
-    }
-]
-
-const internQuestions = [
-    {
-        type: "input",
-        name: "roleData",
-        message: "Please provide intern's school"
-    },
-    {
-        type: "list",
-        message: "Would you like to add more members to your team?",
-        choices: [
-            "yes",
-            "no"
-        ],
-        name: "moreMembers"
-    }
-]
 
 //function to get all team memeber details using inquirer package.
 function getTeamMemberInputs(generalQuestions) {
     return inquirer.prompt(generalQuestions)
 }
 
-function getManagerInputs(managerQuestions) {
-    return inquirer.prompt(managerQuestions);
+function getRoleBasedInputs(roleQues) {
+    return inquirer.prompt([{
+        type: "input",
+        message: `Enter team member's ${roleQues}`,
+        name: "roleQues"
+    },
+    {
+        type: "list",
+        message: "Would you like to add more team members?",
+        choices: [
+            "yes",
+            "no"
+        ],
+        name: "moreMembers"
+    }])
 }
-
-function getEngineerInputs(engineerQuestions) {
-    return inquirer.prompt(engineerQuestions);
-}
-
-function getInternInputs(internQuestions) {
-    return inquirer.prompt(internQuestions);
-}
-
 
 
 function writeHtmlToFile() {
@@ -116,42 +71,81 @@ function writeHtmlToFile() {
 
 
 function memberConstructor({ name, role, emailID, employeeId }) {
-        let teamMember;
-        if (role === 'Manager') {
-            return getManagerInputs(managerQuestions)
-                .then(({ roleData, moreMembers }) => {
-                    teamMember = new Manager(name, role, emailID, employeeId, roleData);
-                    return Promise.resolve(teamMember);
-                })
-        }
-        else if (role === 'Engineer') {
-            return getEngineerInputs(engineerQuestions)
-                .then(({ roleData, moreMembers }) => {
-                    teamMember = new Engineer(name, role, emailID, employeeId, roleData);
-                    return teamMember;
-                })
-        }
-        else {
-            return getInternInputs(internQuestions)
-                .then(({ roleData }) => {
-                    teamMember = new Intern(name, role, emailID, employeeId, roleData);
-                    return teamMember;
-                })
-        }
+    let teamMember;
+    if (role === 'Manager') {
+        return getManagerInputs(managerQuestions)
+            .then(({ roleData, moreMembers }) => {
+                teamMember = new Manager(name, role, emailID, employeeId, roleData);
+                return Promise.resolve(teamMember);
+            })
     }
+    else if (role === 'Engineer') {
+        return getEngineerInputs(engineerQuestions)
+            .then(({ roleData, moreMembers }) => {
+                teamMember = new Engineer(name, role, emailID, employeeId, roleData);
+                return teamMember;
+            })
+    }
+    else {
+        return getInternInputs(internQuestions)
+            .then(({ roleData }) => {
+                teamMember = new Intern(name, role, emailID, employeeId, roleData);
+                return teamMember;
+            })
+    }
+}
 
 function init() {
     getTeamMemberInputs(generalQuestions)
-        .then((data)=>{
-            return memberConstructor(data)
+        .then(({ name, role, emailID, employeeId }) => {
+            let roleQuestion;
+            switch (role) {
+                case 'Manager':
+                    roleQuestion = 'officeNumber'
+                    break;
+                case 'Engineer':
+                    roleQuestion = 'github'
+                    break;
+                case 'Intern':
+                    roleQuestion = 'school'
+            };
+            getRoleBasedInputs(roleQuestion)
+                .then(({ roleQues, moreMembers }) => {
+                    console.log(roleQues)
+                    let teamMember;
+                    switch (role) {
+                        case 'Manager':
+                            teamMember = new Manager(name, role, emailID, employeeId, roleQues);
+                            break;
+                        case 'Engineer':
+                            teamMember = new Engineer(name, role, emailID, employeeId, roleQues);
+                            break;
+                        case 'Intern':
+                            teamMember = new Intern(name, role, emailID, employeeId, roleQues);
+                    };
+                    teamMembers.push(teamMember);
+                    console.log('teamMembers', teamMembers)
+                    if (moreMembers === 'yes') {
+                        return init()
+                    }
+                   
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })
+
+            // return memberConstructor(data)
         })
-        .then((memberObj)=>{
-            teamMembers.push(memberObj)
-            writeHtmlToFile(teamMembers)
-            .then((resolved)=>{
-            })
-            
-        })
+        // .then((res)=>{
+        //     console.log(res);
+        // })
+        // .then((memberObj)=>{
+        //     teamMembers.push(memberObj)
+        //     writeHtmlToFile(teamMembers)
+        //     .then((resolved)=>{
+        //     })
+
+        // })
         .catch((err) => {
             console.log(err)
         })
