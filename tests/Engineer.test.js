@@ -4,6 +4,12 @@ describe("Engineer", ()=>{
     it ("should set GitHUb account via constructor", () => {
         const testValue = "GitHubUser";
         const engineer = new Engineer('name', 'role', 'emailID', 'employeeId', testValue);
+        expect(engineer.github).toBe(testValue);
+      })
+
+      it ("should get GitHUb account via constructor", () => {
+        const testValue = "GitHubUser";
+        const engineer = new Engineer('name', 'role', 'emailID', 'employeeId', testValue);
         expect(engineer.getGithub()).toBe(testValue);
       })
 
