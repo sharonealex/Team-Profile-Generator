@@ -1,6 +1,11 @@
-const renderMemberCards = require('./populateHTML');
+const renderMemberCards = require("./populateHTML");
 
-const renderBaseHtml = (data) =>  `<!DOCTYPE html>
+/**
+ * Function to render Base html which is to be populated with the data passed in from main function.
+ * @param {} data 
+ * @returns 
+ */
+const renderBaseHtml = (data) => `<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -64,11 +69,8 @@ const renderBaseHtml = (data) =>  `<!DOCTYPE html>
         </div>
     </div>
 </body>
-</html>`
-       
+</html>`;
 
-module.exports ={
-    renderBaseHtml: renderBaseHtml
-} 
-
-
+module.exports = {
+  renderBaseHtml: renderBaseHtml,
+};

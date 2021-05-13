@@ -1,20 +1,26 @@
-function renderMemberCards(membersData){
-    const htmlCardArr = membersData.map(function(data){
+
+/**
+ * Function to render different html memeber cards based on the type of employee profile.
+ * @param {*} membersData 
+ * @returns 
+ */
+function renderMemberCards(membersData) {
+    const htmlCardArr = membersData.map(function (data) {
         let memberRole = data.getRole();
-        if(memberRole === 'Manager'){
+        if (memberRole === 'Manager') {
             return renderManagerCard(data)
         }
-        else if(memberRole === 'Engineer'){
+        else if (memberRole === 'Engineer') {
             return renderEngineerCard(data)
         }
-        else{
+        else {
             return renderInternCard(data);
         }
     })
     return htmlCardArr.join("\n");
 }
 
-function renderManagerCard(memberData){
+function renderManagerCard(memberData) {
     return ` <div class="col-4">
     <div class="card mx-auto mb-3" style="width: 18rem">
         <img class="card-img-top"
@@ -32,8 +38,8 @@ function renderManagerCard(memberData){
 </div>`
 }
 
-function renderEngineerCard (memberData){
-return `<div class="col-4">
+function renderEngineerCard(memberData) {
+    return `<div class="col-4">
 <div class="card mx-auto mb-3" style="width: 18rem">
     <img class="card-img-top"
         src="https://icons.iconarchive.com/icons/icons-land/vista-people/256/Office-Client-Female-Dark-icon.png"
@@ -50,8 +56,8 @@ return `<div class="col-4">
 </div>`
 }
 
-function renderInternCard (memberData){
-return `<div class="col-4">
+function renderInternCard(memberData) {
+    return `<div class="col-4">
 <div class="card mx-auto mb-3" style="width: 18rem">
     <img class="card-img-top"
         src="https://icons.iconarchive.com/icons/icons-land/vista-people/256/Age-Child-Male-Light-icon.png"

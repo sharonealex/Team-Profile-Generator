@@ -6,11 +6,9 @@ const Intern = require('./lib/Intern');
 const baseHtmlTemplate = require('./src/baseHtmlTemplate');
 const populateHTML = require('./src/populateHTML')
 
+const teamMembers = []; //array initialised to story the list of team members.
 
-
-
-const teamMembers = [];
-const generalQuestions = [
+const generalQuestions = [  //questions that are general to all types of team members.
     {
         type: "input",
         name: "name",
@@ -40,8 +38,16 @@ const generalQuestions = [
 
 
 
-//function to get all team memeber details using inquirer package.
+
+/**
+ * Function to input all the team memeber profile using inquirer package prompts.
+ * @param {*} generalQuestions 
+ * @returns 
+ */
 function getTeamMemberInputs(generalQuestions) {
+    console.log("==================================================================================")
+    console.log("===============ENTER TEAM MEMBER PROFILE DATA BASED ON THE PROMPTS================")
+    console.log("==================================================================================")
     return inquirer.prompt(generalQuestions)
 }
 
@@ -62,14 +68,21 @@ function getRoleBasedInputs(roleQues) {
     }])
 }
 
-
+/**
+ * Function that populates the base html template and writes it to a file for display.
+ * @param {} teamMembers 
+ * @returns 
+ */
 function populateHtmlAndWriteToFile(teamMembers) {
     const fileName = "./output/team.html";
     const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
+    console.log("=============WRITING TEAM PROFILE CONTENTS INTO HTML============")
     return fsPromises.writeFile(fileName, html)
 }
 
-
+/**
+ * Function to initialise the app and build team profiles.
+ */
 function init() {
     getTeamMemberInputs(generalQuestions)
         .then(({ name, role, emailID, employeeId }) => {
@@ -102,10 +115,8 @@ function init() {
                         return init()
                     }
                     populateHtmlAndWriteToFile(teamMembers)
-
-                   
                 })
-                .catch((err)=>{
+                .catch((err) => {
                     console.log(err);
                 })
         })
