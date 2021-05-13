@@ -14,81 +14,57 @@ function renderMemberCards(membersData){
     return htmlCardArr.join("\n");
 }
 
-// function renderManagerCard (memberData){
-//     return `<div class="col-6">
-//     <div class="card mx-auto mb-3" style="width: 18rem">
-//     <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
-//     <ul class="list-group list-group-flush">
-//         <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-//         <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-//         <li class="list-group-item">Office Phone: ${memberData.getOfficeNumber()}</li>
-//     </ul>
-//     </div>
-//     </div>`
-// }
-
 function renderManagerCard(memberData){
-    return `<div class="col-6">
-    <div class="card mx-auto" style="width: 18rem">
+    return ` <div class="col-4">
+    <div class="card mx-auto mb-3" style="width: 18rem">
+        <img class="card-img-top"
+            src="https://icons.iconarchive.com/icons/aha-soft/free-large-boss/512/Manager-icon.png"
+            alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
+            <ul class="list-group list-group-flush">
+            <li class="list-group-item">Employee ID: ${memberData.getEmployeeId()}</li>
+            <li class="list-group-item">Contact: ${memberData.getEmailId()}</li>
+            <li class="list-group-item">OfficeNumber: ${memberData.getOfficeNumber()}</li>
+            </ul>
+        </div>
+    </div>
+</div>`
+}
+
+function renderEngineerCard (memberData){
+return `<div class="col-4">
+<div class="card mx-auto mb-3" style="width: 18rem">
+    <img class="card-img-top"
+        src="https://icons.iconarchive.com/icons/icons-land/vista-people/256/Office-Client-Female-Dark-icon.png"
+        alt="Card image cap">
+    <div class="card-body">
         <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-            <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-            <li class="list-group-item">Office Phone: ${memberData.getOfficeNumber()}</li>
+        <li class="list-group-item">Employee ID: ${memberData.getEmployeeId()}</li>
+        <li class="list-group-item">Contact: ${memberData.getEmailId()}</li>
+        <li class="list-group-item">OfficeNumber: ${memberData.getGithub()}</li>
         </ul>
     </div>
-    </ul>
-</div>`
-}
-
-
-// function renderEngineerCard (memberData){
-//     return `<div class="card mx-auto" style="width: 18rem">
-//     <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
-//     <ul class="list-group list-group-flush">
-//         <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-//         <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-//         <li class="list-group-item">Office Phone: ${memberData.getGithub()}</li>
-//     </ul>
-//     </div>`
-
-// }
-function renderEngineerCard (memberData){
-return ` <div class="col-6">
-<div class="card mx-auto" style="width: 18rem">
-    <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-        <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-        <li class="list-group-item">Github: ${memberData.getGithub()}</li>
-    </ul>
 </div>
-</ul>
 </div>`
 }
-
-// function renderInternCard (memberData){
-//     return `<div class="card mx-auto" style="width: 18rem">
-//     <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
-//     <ul class="list-group list-group-flush">
-//         <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-//         <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-//         <li class="list-group-item">Office Phone: ${memberData.getSchool()}</li>
-//     </ul>
-//     </div>`
-// }
 
 function renderInternCard (memberData){
-return ` <div class="col-6">
-<div class="card mx-auto" style="width: 18rem">
-<h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">ID: ${memberData.getEmployeeId()}</li>
-        <li class="list-group-item">Email Address: ${memberData.getEmailId()}</li>
-        <li class="list-group-item">School:  ${memberData.getSchool()}</li>
-    </ul>
+return `<div class="col-4">
+<div class="card mx-auto mb-3" style="width: 18rem">
+    <img class="card-img-top"
+        src="https://icons.iconarchive.com/icons/icons-land/vista-people/256/Age-Child-Male-Light-icon.png"
+        alt="Card image cap">
+    <div class="card-body">
+        <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Employee ID: ${memberData.getEmployeeId()}</li>
+            <li class="list-group-item">Contact: ${memberData.getEmailId()}</li>
+            <li class="list-group-item">School: ${memberData.getSchool()}</li>
+        </ul>
+    </div>
 </div>
-</ul>
 </div>`
 }
 
