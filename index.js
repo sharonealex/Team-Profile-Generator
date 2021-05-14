@@ -4,7 +4,6 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const baseHtmlTemplate = require('./src/baseHtmlTemplate');
-const populateHTML = require('./src/populateHTML')
 
 const teamMembers = []; //array initialised to story the list of team members.
 
@@ -31,7 +30,7 @@ const managerQuestions = [  //questions that are prompted for manager.
     }
 ]
 
-const selectRoleQuestions = [
+const selectRoleQuestions = [  //questions that are prompted for building team
     {
         type: "list",
         name: "role",
@@ -44,62 +43,66 @@ const selectRoleQuestions = [
     }
 ]
 
-const engineerQuestions = [
+const engineerQuestions = [   //questions that are prompted for engineers
     {
         type: 'input',
         name: 'name',
         message: 'What is engineer\'s name?',
-        default: 'Mark Joe',
+        default: 'Sally Joe',
 
     },
     {
         type: 'input',
         name: 'employeeId',
         message: 'What\'s engineer\'s id?',
-        default: '02'
+        default: '02987'
     },
     {
         type: 'input',
         name: 'emailID',
         message: 'What is your email address?',
-        default: 'markJoe@123.com',
+        default: 'sallyJoe@123.com',
     },
     {
         type: 'input',
         name: 'github',
         message: 'Enter your GitHub username',
-        default: 'samjoe',
+        default: 'sallyJoe99',
     }
 ]
 
-const internQuestions = [
+const internQuestions = [ //questions that are prompted for interns
     {
         type: 'input',
         name: 'name',
         message: 'What is interns\'s name?',
-        default: 'Mark Joe',
+        default: 'Mark Thomas',
 
     },
     {
         type: 'input',
         name: 'employeeId',
         message: 'What\'s interns\'s id?',
-        default: '02'
+        default: '0298'
     },
     {
         type: 'input',
         name: 'emailID',
         message: 'What is your email address?',
-        default: 'Bill Thomase@123.com'
+        default: 'MarkThomas@123.com'
     },
     {
         type: 'input',
         name: 'school',
         message: 'Enter your school name',
-        default: 'grammar'
+        default: 'Monash'
     },
 ]
 
+/**
+ * Funtion to construct an engineer instance from the prompted answers,
+ * and add to list of team members for  building the team.
+ */
 function createEngineer() {
     inquirer.prompt(engineerQuestions)
         .then(({ name, emailID, employeeId, github}) => {
@@ -109,6 +112,10 @@ function createEngineer() {
         })
 }
 
+/**
+ * Funtion to construct an intern instance from the prompted answers,
+ * and add to list of team members for  building the team.
+ */
 function createIntern() {
     inquirer.prompt(internQuestions)
         .then(({ name, emailID, employeeId, school}) => {
@@ -119,13 +126,19 @@ function createIntern() {
         })
 }
 
+/**
+ * Funtion to construct an manager instance from the prompted answers,
+ * and add to list of team members for  building the team.
+ */
 function createManager({ name, emailID, employeeId, officeNumber }) {
     const manager = new Manager(name, "Manager", emailID, employeeId, officeNumber)
     teamMembers.push(manager)
     buildTeam();
 }
 
-
+/**
+ * Funtion to conditionally invoke team member constructor based on roles
+ */
 function memberConstructor(role) {
     switch (role) {
         case 'Engineer': {
@@ -142,6 +155,10 @@ function memberConstructor(role) {
     }
 }
 
+
+/**
+ * Funtion that acts as the connector to add more members or finish build.
+ */
 function buildTeam() {
     inquirer.prompt(selectRoleQuestions)
         .then(({ role }) => {
@@ -154,6 +171,10 @@ function buildTeam() {
         })
 }
 
+
+/**
+ * Funtion that populates the base html template with relevant role cards and writes to html for display
+ */
 function populateHtmlAndWriteToFile(teamMembers) {
     const fileName = "./dist/team.html";
     const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
@@ -162,6 +183,10 @@ function populateHtmlAndWriteToFile(teamMembers) {
 }
 
 
+
+/**
+ * Initialize the app, to prompt to enter managers profile data.
+ */
 function init() {
     console.log("****************************************************************************")
     console.log("*******************Application Start: Team Profile Generator****************")
