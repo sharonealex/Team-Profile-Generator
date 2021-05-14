@@ -30,7 +30,7 @@ function renderManagerCard(memberData) {
             <h5 class="card-header">${memberData.getName()}<br /><br />${memberData.getRole()}</h5>
             <ul class="list-group list-group-flush">
             <li class="list-group-item">Employee ID: ${memberData.getEmployeeId()}</li>
-            <li class="list-group-item">Contact: ${memberData.getEmailId()}</li>
+            <li class="list-group-item">Contact: <a href="mailto:${memberData.getEmailId()}">${memberData.getEmailId()}</a></li>
             <li class="list-group-item">OfficeNumber: ${memberData.getOfficeNumber()}</li>
             </ul>
         </div>
@@ -49,7 +49,7 @@ function renderEngineerCard(memberData) {
         <ul class="list-group list-group-flush">
         <li class="list-group-item">Employee ID: ${memberData.getEmployeeId()}</li>
         <li class="list-group-item">Contact: ${memberData.getEmailId()}</li>
-        <li class="list-group-item">OfficeNumber: ${memberData.getGithub()}</li>
+        <li class="list-group-item">GitHub: <a href="https://github.com/${memberData.getGithub()}" target="_blank" rel="noopener noreferrer">${memberData.getGithub()}</a></li>
         </ul>
     </div>
 </div>

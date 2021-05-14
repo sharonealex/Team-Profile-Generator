@@ -8,121 +8,166 @@ const populateHTML = require('./src/populateHTML')
 
 const teamMembers = []; //array initialised to story the list of team members.
 
-const generalQuestions = [  //questions that are general to all types of team members.
+const managerQuestions = [  //questions that are prompted for manager.
     {
         type: "input",
         name: "name",
-        message: "Please provide team member's name",
+        message: "Please provide team manager's name",
     },
+    {
+        type: "input",
+        name: "employeeId",
+        message: "Please provide managers's employee ID"
+    },
+    {
+        type: "input",
+        name: "emailID",
+        message: "Please provide managers's email address"
+    },
+    {
+        type: "input",
+        message: `Enter managers office number`,
+        name: "officeNumber"
+    }
+]
+
+const selectRoleQuestions = [
     {
         type: "list",
         name: "role",
         choices: [
             "Engineer",
             "Intern",
-            "Manager"
+            "Finish Build"
         ],
-        message: "Please select team memeber's role"
-    },
-    {
-        type: "input",
-        name: "emailID",
-        message: "Please provide team members's email address"
-    },
-    {
-        type: "input",
-        name: "employeeId",
-        message: "Please provide team memeber's employee ID"
+        message: "If you'd like to add more select ROLE choice or select FINISH BUILD"
     }
 ]
 
+const engineerQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'What is engineer\'s name?',
+        default: 'Mark Joe',
 
-
-
-/**
- * Function to input all the team memeber profile using inquirer package prompts.
- * @param {*} generalQuestions 
- * @returns 
- */
-function getTeamMemberInputs(generalQuestions) {
-    console.log("==================================================================================")
-    console.log("===============ENTER TEAM MEMBER PROFILE DATA BASED ON THE PROMPTS================")
-    console.log("==================================================================================")
-    return inquirer.prompt(generalQuestions)
-}
-
-function getRoleBasedInputs(roleQues) {
-    return inquirer.prompt([{
-        type: "input",
-        message: `Enter team member's ${roleQues}`,
-        name: "roleQues"
     },
     {
-        type: "list",
-        message: "Would you like to add more team members?",
-        choices: [
-            "yes",
-            "no"
-        ],
-        name: "moreMembers"
-    }])
+        type: 'input',
+        name: 'employeeId',
+        message: 'What\'s engineer\'s id?',
+        default: '02'
+    },
+    {
+        type: 'input',
+        name: 'emailID',
+        message: 'What is your email address?',
+        default: 'markJoe@123.com',
+    },
+    {
+        type: 'input',
+        name: 'github',
+        message: 'Enter your GitHub username',
+        default: 'samjoe',
+    }
+]
+
+const internQuestions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'What is interns\'s name?',
+        default: 'Mark Joe',
+
+    },
+    {
+        type: 'input',
+        name: 'employeeId',
+        message: 'What\'s interns\'s id?',
+        default: '02'
+    },
+    {
+        type: 'input',
+        name: 'emailID',
+        message: 'What is your email address?',
+        default: 'Bill Thomase@123.com'
+    },
+    {
+        type: 'input',
+        name: 'school',
+        message: 'Enter your school name',
+        default: 'grammar'
+    },
+]
+
+function createEngineer() {
+    inquirer.prompt(engineerQuestions)
+        .then(({ name, emailID, employeeId, github}) => {
+            const engineer = new Engineer(name, "Engineer", emailID, employeeId, github)
+            teamMembers.push(engineer);
+            buildTeam();
+        })
 }
 
-/**
- * Function that populates the base html template and writes it to a file for display.
- * @param {} teamMembers 
- * @returns 
- */
+function createIntern() {
+    inquirer.prompt(internQuestions)
+        .then(({ name, emailID, employeeId, school}) => {
+            const intern = new Intern(name, "Intern", emailID, employeeId, school)
+            teamMembers.push(intern)
+            buildTeam();
+
+        })
+}
+
+function createManager({ name, emailID, employeeId, officeNumber }) {
+    const manager = new Manager(name, "Manager", emailID, employeeId, officeNumber)
+    teamMembers.push(manager)
+    buildTeam();
+}
+
+
+function memberConstructor(role) {
+    switch (role) {
+        case 'Engineer': {
+            createEngineer();
+            break;
+        }
+        case 'Intern': {
+            createIntern();
+            break;
+        }
+        default: {
+            init();
+        }
+    }
+}
+
+function buildTeam() {
+    inquirer.prompt(selectRoleQuestions)
+        .then(({ role }) => {
+            if (role === "Finish Build") {
+                populateHtmlAndWriteToFile(teamMembers);
+            } else {
+                memberConstructor(role);
+            }
+
+        })
+}
+
 function populateHtmlAndWriteToFile(teamMembers) {
-    const fileName = "./output/team.html";
+    const fileName = "./dist/team.html";
     const html = baseHtmlTemplate.renderBaseHtml(teamMembers);
-    console.log("=============WRITING TEAM PROFILE CONTENTS INTO HTML============")
+    console.log("******************TEAM PROFILE HTML GENERATED FOR DISPLAY******************")
     return fsPromises.writeFile(fileName, html)
 }
 
-/**
- * Function to initialise the app and build team profiles.
- */
+
 function init() {
-    getTeamMemberInputs(generalQuestions)
-        .then(({ name, role, emailID, employeeId }) => {
-            let roleQuestion;
-            switch (role) {
-                case 'Manager':
-                    roleQuestion = 'officeNumber'
-                    break;
-                case 'Engineer':
-                    roleQuestion = 'github'
-                    break;
-                case 'Intern':
-                    roleQuestion = 'school'
-            };
-            getRoleBasedInputs(roleQuestion)
-                .then(({ roleQues, moreMembers }) => {
-                    let teamMember;
-                    switch (role) {
-                        case 'Manager':
-                            teamMember = new Manager(name, role, emailID, employeeId, roleQues);
-                            break;
-                        case 'Engineer':
-                            teamMember = new Engineer(name, role, emailID, employeeId, roleQues);
-                            break;
-                        case 'Intern':
-                            teamMember = new Intern(name, role, emailID, employeeId, roleQues);
-                    };
-                    teamMembers.push(teamMember);
-                    if (moreMembers === 'yes') {
-                        return init()
-                    }
-                    populateHtmlAndWriteToFile(teamMembers)
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    console.log("****************************************************************************")
+    console.log("*******************Application Start: Team Profile Generator****************")
+    console.log("****************************************************************************")
+    inquirer.prompt(managerQuestions)
+        .then(createManager)
 }
 
 init();

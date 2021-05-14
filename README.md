@@ -28,8 +28,7 @@ THEN an HTML file is generated that displays a nicely formatted team roster base
 WHEN I click on an email address in the HTML
 THEN my default email program opens and populates the TO field of the email with the address
 WHEN I click on the GitHub username
-THEN that GitHub profile 
- in a new tab
+THEN that GitHub profile opens in a new tab
 WHEN I start the application
 THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
 WHEN I enter the team manager’s name, employee ID, email address, and office number
