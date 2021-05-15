@@ -8,7 +8,10 @@ The below video link is a demonstration of how this application works on the ser
 
 Here is a video of the typical user flow through your application. This includes views of the prompts and the responses after their selection.
 
-" "
+"https://drive.google.com/file/d/1xcAYvGPw9oeKFOwhh4PqmOYEBPiIUP98/view" 
+
+![Alt text](./assets/image.PNG?raw=true "Title")
+
 
 
 ## User Story
